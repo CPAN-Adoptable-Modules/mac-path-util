@@ -1,29 +1,35 @@
 # $Id$
 use ExtUtils::MakeMaker;
+	
+sub ExtUtils::MM_Any::test_via_harness
+		{
+		my($self, $perl, $tests) = @_;
 
-my $tests = do {
-	local @ARGV = qw(t/test_manifest);
-	my $data = join " ", map {chomp; "t/$_" } <>;
-	};
+		return qq|\t$perl "-MTest::Manifest" | .
+			qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
+			qq|'\$(INST_ARCHLIB)')"\n|;
+		}
 	
 WriteMakefile(
     'NAME'		    => 'Mac::Path::Util',
-	'VERSION'       => '0.05_02',
+	'VERSION_FROM'  => 'lib/Util.pm',
 	
     'PM'            => {
      	'lib/Util.pm'         => '$(INST_LIBDIR)/Util.pm',
     	},
 
 	'PREREQ_PM' => {
-		File::Find::Rule  => '0',
-		Mac::AppleScript  => '0.03',
-		Test::More        => '0',
-		Test::Pod         => '0',
-		Test::Data        => '0',
-		Test::Prereq      => '0',
+		'File::Find::Rule'  => '0',
+		'Test::Data'        => '0',
+		'Test::Manifest'    => '0.9',
+		'Test::More'        => '0',
+		'Test::Pod'         => '0.72',
+		'Test::Prereq'      => '0.18',
+		},
+
+	'MAN3PODS'		=> {
+		'lib/Util.pm'    => '$(INST_MAN3DIR)/Mac::Path::Util.3',
 		},
 		    	
-    test   => { TESTS      => $tests },
-    depend => { 'Makefile' => 't/test_manifest' },
-    	
+	clean => { FILES => 'Mac-Path-Util' },
 	);
