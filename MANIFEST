@@ -1,0 +1,11 @@
+MANIFEST			This list of files
+Makefile.PL
+lib/Util.pm
+t/darwin2mac.t
+t/get_startup.t
+t/identity.t
+t/is_startup.t
+t/load.t
+t/pod.t
+t/prereq.t
+t/test_manifest
