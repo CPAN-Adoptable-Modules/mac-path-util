@@ -31,5 +31,5 @@ WriteMakefile(
 		'lib/Util.pm'    => '$(INST_MAN3DIR)/Mac::Path::Util.3',
 		},
 		    	
-	clean => { FILES => 'Mac-Path-Util' },
+	clean => { FILES => 'Mac-Path-Util-*' },
 	);
