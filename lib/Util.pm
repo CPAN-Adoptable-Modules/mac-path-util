@@ -3,7 +3,7 @@ package Mac::Path::Util;
 use strict;
 
 use base qw(Exporter);
-use vars qw(@EXPORT_OK %EXPORT_TAGS);
+use vars qw(@EXPORT_OK %EXPORT_TAGS $VERSION);
 
 use Cwd qw(getcwd);
 use Exporter;
@@ -12,6 +12,7 @@ use Exporter;
 %EXPORT_TAGS = (
 	'system' => [ qw(DARWIN MACOS) ],
 	);
+$VERSION = 0.06;
 
 my $Startup;
 
@@ -32,20 +33,21 @@ THIS IS ALPHA SOFTWARE.  SOME THINGS ARE NOT FINISHED.
 
 Convert between darwin (unix) and Mac file paths.
 
-This is not as simple as changing the directory separator.
-The Mac path has the volume name in it, whereas the darwin
-path leaves of the startup volume name because it is mounted
-as /.
+This is not as simple as changing the directory separator. The Mac path
+has the volume name in it, whereas the darwin path leaves off the
+startup volume name because it is mounted as /.  Mac::Path::Util can
+optionally use AppleScript to determine the real startup volume name
+(off by default) if you have installed Mac::AppleScript.  You can use
+this module on other platforms too.
 
 Colons ( ":" ) in the darwin path become / in the Mac path, and forward
 slashes in the Mac path become colons in the darwin path.
 
-Mac paths do not have a leading directory separator for absolute
-paths.
+Mac paths do not have a leading directory separator for absolute paths.
 
-Normally, Mac paths that end in a directory name have a trailing
-colon, but this module cannot necessarily verify that since you
-may want to convert paths.
+Normally, Mac paths that end in a directory name have a trailing colon,
+but this module cannot necessarily verify that since you may want to
+convert paths.
 
 =head2 Methods
 
@@ -64,6 +66,8 @@ use constant FALSE     => 'false';
 
 use constant LOCAL     => 'local';
 use constant REMOTE    => 'remote';
+
+use constant STARTUP   => 'Mac OS X Startup';
 
 =item new( PATH [, HASH ] )
 
@@ -87,11 +91,12 @@ sub new
 		unless ( $args->{type} eq DARWIN or $args->{type} eq MACOS );
 
 	my $self = {
-		starting_path => $path,
-		type          => $type,
-		path          => $path,
+		starting_path  => $path,
+		type           => $type,
+		path           => $path,
+		no_applescript => 1,
 		};
-
+	
 	bless $self, $class;
 
 	$self->{startup} = $args->{startup} || undef;
@@ -161,14 +166,31 @@ sub new
 
 =item darwin_path
 
+=back
+
 =cut
 
-sub type        { return $_[0]->{type}        }
-sub path        { return $_[0]->{path}        }
-sub volume      { return $_[0]->{volume}      }
-sub startup     { return $_[0]->{startup}     }
-sub mac_path    { return $_[0]->{mac_path}    }
-sub darwin_path { return $_[0]->{darwin_path} }
+sub type            { return $_[0]->{type}        }
+sub path            { return $_[0]->{path}        }
+sub volume          { return $_[0]->{volume}      }
+sub startup         { return $_[0]->{startup}     }
+sub mac_path        { return $_[0]->{mac_path}    }
+sub darwin_path     { return $_[0]->{darwin_path} }
+
+=head2 Setter methods
+
+=over 4
+
+=item use_applescript( [ TRUE | FALSE ] )
+
+Mac::Path::Util will try to use AppleScript to determine the real
+startup volume name if you pass this method a true value and you
+have Mac::AppleScript installed.  Otherwise it will use the default
+startup volume name.
+
+=cut
+
+sub use_applescript { $_[0]->{darwin_path} = $_[1] ? 1 : 0 }
 
 sub _d2m_trans
 	{
@@ -271,14 +293,23 @@ sub _get_startup
 	return $self->startup if defined $self->startup;
 	return $Startup if defined $Startup;
 
-	return unless eval { require Mac::AppleScript };
-
-	my $script = "return path to startup disk as string";
-
-	my $volume = Mac::AppleScript::RunAppleScript( $script );
-	$volume =~ s/^"|"$//g;
-	$volume =~ s/:$//g;
-
+	my $volume = do {
+		if( $self->{use_applescript} and eval { require Mac::AppleScript } )
+			{
+	
+			my $script = "return path to startup disk as string";
+	
+			my $volume = Mac::AppleScript::RunAppleScript( $script );
+			$volume =~ s/^"|"$//g;
+			$volume =~ s/:$//g;
+			$volume;
+			}
+		else
+			{
+			STARTUP;
+			}
+		};
+		
 	#print STDERR "I think the startup volume is [$volume]\n";
 
 	$Startup = $self->{startup} = $volume;
@@ -299,6 +330,16 @@ sub _is_startup
 	}
 
 =back
+
+=head1 SOURCE AVAILABILITY
+
+This source is part of a SourceForge project which always has the
+latest sources in CVS, as well as all of the previous releases.
+
+	https://sourceforge.net/projects/brian-d-foy/
+	
+If, for some reason, I disappear from the world, one of the other
+members of the project can shepherd this module appropriately.
 
 =head1 AUTHOR
 
