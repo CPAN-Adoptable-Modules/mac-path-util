@@ -3,9 +3,11 @@ use strict;
 
 use vars qw(@pairs);
 
+use Mac::Path::Util;
+
 BEGIN {
 	@pairs = (
-		[ qw(/Users/brian Otter:Users:brian) ],
+		[ '/Users/brian', Mac::Path::Util::STARTUP . ":Users:brian" ],
 		[ qw(brian :brian) ],
 		[ qw(brian/Dev/Mac :brian:Dev:Mac) ],
 		[ qw(/Volumes/CPAN/brian/Dev/Mac CPAN:brian:Dev:Mac) ],
@@ -15,7 +17,6 @@ BEGIN {
 use Test::More tests => 2 * scalar @pairs;
 use Test::Data qw(Scalar);
 
-use Mac::Path::Util;
 
 foreach my $pair ( @pairs )
 	{
@@ -24,7 +25,8 @@ foreach my $pair ( @pairs )
 	bless $hash, 'Mac::Path::Util';
 	my $result = $hash->_darwin2mac;
 
-	is( $result, $pair->[1] );
+	is( $result, $pair->[1],
+		"White box: Mac path is right [$$pair[1]]" );
 	
 	# black box test
 	my $path = Mac::Path::Util->new( $pair->[0] );
@@ -34,7 +36,8 @@ foreach my $pair ( @pairs )
 		next;
 		}
 	
-	is( $path->mac_path, $pair->[1] );
+	is( $path->mac_path, $pair->[1], 
+		"Black box: Mac path is right [$$pair[1]]" );
 	}
 	
 

@@ -14,7 +14,9 @@ my $Startup = $util->_get_startup;
 defined_ok( $Startup );
 
 $Not_startup .= "1984" if $Startup eq $Not_startup;
-isnt( $Not_startup, $Startup );
+isnt( $Not_startup, $Startup, "Wrong and right names are different" );
 
-is( $util->_is_startup( $Not_startup ), 'false' );
-is( $util->_is_startup( $Startup ), 'true' );
+is( $util->_is_startup( $Not_startup ), 'false', 
+	"Wrong name correctly fails" );
+is( $util->_is_startup( $Startup ), 'true', 
+	"Right name correctly succeeds" );
