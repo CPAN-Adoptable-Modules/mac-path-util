@@ -89,8 +89,8 @@ sub new
 	my $path  = shift;
 	my $args  = shift;
 
-	my $type  = DONT_KNOW 
-		unless ( $args->{type} eq DARWIN or $args->{type} eq MACOS );
+	my $type  = DONT_KNOW
+		unless ( defined $args->{type} and ( $args->{type} eq DARWIN or $args->{type} eq MACOS ) );
 
 	my $self = {
 		starting_path   => $path,
