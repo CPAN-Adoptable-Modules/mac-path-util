@@ -1,5 +1,9 @@
 # $Id$
 
+0.11 - Wed Sep  8 02:47:35 2004
+* updated distro
+* no need to update
+
 0.1 - Thu Sep  2 17:26:53 2004
 * distribution clean-up: no need to upgrade if you already have this 
 module
