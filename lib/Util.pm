@@ -12,7 +12,7 @@ use Exporter;
 %EXPORT_TAGS = (
 	'system' => [ qw(DARWIN MACOS) ],
 	);
-$VERSION = 0.09;
+$VERSION = 0.10;
 
 my $Startup;
 
@@ -73,7 +73,6 @@ use constant STARTUP   => 'Startup';
 
 =item new( PATH [, HASH ] )
 
-
 The optional anonymous hash can have these values:
 
 	type      DARWIN or MACOS (explicitly state which sort of path
@@ -90,13 +89,14 @@ sub new
 	my $args  = shift;
 
 	my $type  = DONT_KNOW
-		unless ( $args->{type} && ( $args->{type} eq DARWIN or $args->{type} eq MACOS ) );
+		unless ( $args->{type} && ( $args->{type} eq DARWIN 
+			or $args->{type} eq MACOS ) );
 
 	my $self = {
 		starting_path   => $path,
 		type            => $type,
 		path            => $path,
-		use_carbon	=> ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
+		use_carbon      => ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
 		};
 	
 	bless $self, $class;
@@ -205,7 +205,7 @@ sub _d2m_trans
 	{
 	my $name = shift;
 
-        $name =~ tr|/:|:/|;
+	$name =~ tr|/:|:/|;
 
 	return $name;
 	}
@@ -233,7 +233,7 @@ sub _darwin2mac
 
 			my $abs = $volume .  $path;
 			}
-		# absolute path off of startup volume
+		# absolute path off of startup volume?
 		elsif( substr( $name, 0, 1 ) eq "/" )
 			{
 			my $volume = $self->_get_startup;
@@ -252,7 +252,7 @@ sub _mac2darwin
 	my $self = shift;
 	my $name = shift;
 
-        $name =~ tr|/:|:/|;
+	$name =~ tr|/:|:/|;
 
 	return $name;
 	}
@@ -311,10 +311,9 @@ sub _get_startup
 	return $Startup if defined $Startup;
 
 	my $volume = do {
-               if( $self->{use_carbon} and eval { require MacPerl } )
+		if( $self->{use_carbon} and eval { require MacPerl } )
 			{
-                       (my $volume = scalar MacPerl::Volumes()) =~ s/^.+?:(.+)$/$1/;
-			$volume;
+			(my $volume = scalar MacPerl::Volumes()) =~ s/^.+?:(.+)$/$1/;
 			}
 		else
 			{
@@ -346,18 +345,18 @@ sub _is_startup
 This source is part of a SourceForge project which always has the
 latest sources in CVS, as well as all of the previous releases.
 
-	https://sourceforge.net/projects/brian-d-foy/
+	http://sourceforge.net/projects/brian-d-foy/
 
 If, for some reason, I disappear from the world, one of the other
 members of the project can shepherd this module appropriately.
 
 =head1 AUTHOR
 
-brian d foy, E<lt>bdfoy@cpan.orgE<gt>
+brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright 2002, brian d foy, All rights reserved
+Copyright 2002-2004, brian d foy, All rights reserved
 
 You may use this package under the same terms as Perl itself
 
