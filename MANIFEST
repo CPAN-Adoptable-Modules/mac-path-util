@@ -7,3 +7,5 @@ t/identity.t
 t/is_startup.t
 t/load.t
 t/pod.t
+t/test_manifest
+META.yml                                 Module meta-data (added by MakeMaker)
