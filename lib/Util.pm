@@ -38,7 +38,9 @@ has the volume name in it, whereas the darwin path leaves off the
 startup volume name because it is mounted as /.  Mac::Path::Util can
 optionally use AppleScript to determine the real startup volume name
 (off by default) if you have installed Mac::AppleScript.  You can use
-this module on other platforms too.
+this module on other platforms too.  Once the module has looked up the
+volume name, it caches it.  If you want to reset the cache, use the
+clear_startup() method.
 
 Colons ( ":" ) in the darwin path become / in the Mac path, and forward
 slashes in the Mac path become colons in the darwin path.
@@ -94,7 +96,6 @@ sub new
 		starting_path  => $path,
 		type           => $type,
 		path           => $path,
-		no_applescript => 1,
 		};
 	
 	bless $self, $class;
@@ -190,7 +191,14 @@ startup volume name.
 
 =cut
 
-sub use_applescript { $_[0]->{darwin_path} = $_[1] ? 1 : 0 }
+sub use_applescript 
+	{ 
+	my $self = shift;
+	
+	$self->{use_applescript} = $_[0] ? 1 : 0;
+	
+	$self->clear_startup
+	}
 
 sub _d2m_trans
 	{
@@ -278,6 +286,13 @@ sub _identify
 
 	}
 
+=item clear_startup
+
+Clear the cached startup volume name.  The next lookup will
+reset the cache.
+
+=cut
+
 sub clear_startup
 	{
 	my $self = shift;
@@ -343,7 +358,7 @@ members of the project can shepherd this module appropriately.
 
 =head1 AUTHOR
 
-brian d foy, E<gt>bdfoy@cpan.orgE<gt>
+brian d foy, E<lt>bdfoy@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
