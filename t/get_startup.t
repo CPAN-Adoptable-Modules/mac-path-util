@@ -7,6 +7,7 @@ use Mac::Path::Util;
 my $Startup = Mac::Path::Util::STARTUP;
 
 my $util = Mac::Path::Util->new();
+$util->use_applescript(0);
 isa_ok( $util, 'Mac::Path::Util' );
 
 my $startup = $util->_get_startup;

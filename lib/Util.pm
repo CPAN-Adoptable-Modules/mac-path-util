@@ -12,7 +12,7 @@ use Exporter;
 %EXPORT_TAGS = (
 	'system' => [ qw(DARWIN MACOS) ],
 	);
-$VERSION = 0.06;
+$VERSION = 0.07;
 
 my $Startup;
 
@@ -69,7 +69,7 @@ use constant FALSE     => 'false';
 use constant LOCAL     => 'local';
 use constant REMOTE    => 'remote';
 
-use constant STARTUP   => 'Mac OS X Startup';
+use constant STARTUP   => 'Startup';
 
 =item new( PATH [, HASH ] )
 
@@ -93,9 +93,10 @@ sub new
 		unless ( $args->{type} eq DARWIN or $args->{type} eq MACOS );
 
 	my $self = {
-		starting_path  => $path,
-		type           => $type,
-		path           => $path,
+		starting_path   => $path,
+		type            => $type,
+		path            => $path,
+		use_applescript => ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
 		};
 	
 	bless $self, $class;
@@ -186,7 +187,7 @@ sub darwin_path     { return $_[0]->{darwin_path} }
 
 Mac::Path::Util will try to use AppleScript to determine the real
 startup volume name if you pass this method a true value and you
-have Mac::AppleScript installed.  Otherwise it will use the default
+have Mac::AppleScript installed.  Otherwise it will use a default
 startup volume name.
 
 =cut

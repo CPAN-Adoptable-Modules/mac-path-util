@@ -1,5 +1,8 @@
 # $Id$
 
+0.07 - Tue Nov 26 21:51:49 CST 2002
+	+ AppleScript is turned on if we're on a Mac
+	
 0.06 - Tue Nov 26 13:35:06 CST 2002
 	+ Mac::AppleScript is optional
 	+ use default startup volume name if not AppleScript
