@@ -1,6 +1,9 @@
 # $Id$
 
 0.09 - Sun May 11 22:00:00 CST 2002
+	+ Now uses Mac::Carbon (MacPerl::Volumes()) to get the
+	  startup volume, which is more efficient and reliable than
+	  calling an AppleScript to do it. (Thanks, Pudge)
 	+ Removed dependencies on Test::Manifest, Test::Prereq and
 	  File::Find::Rule.
 

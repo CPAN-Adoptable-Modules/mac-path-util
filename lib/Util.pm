@@ -12,7 +12,7 @@ use Exporter;
 %EXPORT_TAGS = (
 	'system' => [ qw(DARWIN MACOS) ],
 	);
-$VERSION = 0.08;
+$VERSION = 0.09;
 
 my $Startup;
 
@@ -36,8 +36,8 @@ Convert between darwin (unix) and Mac file paths.
 This is not as simple as changing the directory separator. The Mac path
 has the volume name in it, whereas the darwin path leaves off the
 startup volume name because it is mounted as /.  Mac::Path::Util can
-optionally use AppleScript to determine the real startup volume name
-(off by default) if you have installed Mac::AppleScript.  You can use
+optionally use Mac::Carbon to determine the real startup volume name
+(off by default) if you have installed Mac::Carbon.  You can use
 this module on other platforms too.  Once the module has looked up the
 volume name, it caches it.  If you want to reset the cache, use the
 clear_startup() method.
@@ -90,13 +90,13 @@ sub new
 	my $args  = shift;
 
 	my $type  = DONT_KNOW
-		unless ( defined $args->{type} and ( $args->{type} eq DARWIN or $args->{type} eq MACOS ) );
+		unless ( $args->{type} && ( $args->{type} eq DARWIN or $args->{type} eq MACOS ) );
 
 	my $self = {
 		starting_path   => $path,
 		type            => $type,
 		path            => $path,
-		use_applescript => ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
+		use_carbon	=> ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
 		};
 	
 	bless $self, $class;
@@ -183,20 +183,20 @@ sub darwin_path     { return $_[0]->{darwin_path} }
 
 =over 4
 
-=item use_applescript( [ TRUE | FALSE ] )
+=item use_carbon( [ TRUE | FALSE ] )
 
-Mac::Path::Util will try to use AppleScript to determine the real
+Mac::Path::Util will try to use Mac::Carbon to determine the real
 startup volume name if you pass this method a true value and you
-have Mac::AppleScript installed.  Otherwise it will use a default
+have Mac::Carbon installed.  Otherwise it will use a default
 startup volume name.
 
 =cut
 
-sub use_applescript 
+sub use_carbon
 	{ 
 	my $self = shift;
 	
-	$self->{use_applescript} = $_[0] ? 1 : 0;
+	$self->{use_carbon} = $_[0] ? 1 : 0;
 	
 	$self->clear_startup
 	}
@@ -205,9 +205,7 @@ sub _d2m_trans
 	{
 	my $name = shift;
 
-	$name =~ tr/:/\000/;
-	$name =~ tr|/|:|;
-	$name =~ tr|\000|/|;
+        $name =~ tr|/:|:/|;
 
 	return $name;
 	}
@@ -254,9 +252,7 @@ sub _mac2darwin
 	my $self = shift;
 	my $name = shift;
 
-	$name =~ tr|/|\000|;
-	$name =~ tr|:|/|;
-	$name =~ tr|\000|:|;
+        $name =~ tr|/:|:/|;
 
 	return $name;
 	}
@@ -265,8 +261,13 @@ sub _identify
 	{
 	my $self = shift;
 
-	my $colons  = $self->{starting_path} =~ tr/://;
-	my $slashes = $self->{starting_path} =~ tr|/||;
+	my $colons = 0;
+	my $slashes = 0;
+
+	if ( defined $self->{starting_path} ) {
+		$colons  = $self->{starting_path} =~ tr/://;
+		$slashes = $self->{starting_path} =~ tr|/||;
+	}
 
 	if(    $colons == 0 and $slashes == 0 )
 		{
@@ -310,14 +311,9 @@ sub _get_startup
 	return $Startup if defined $Startup;
 
 	my $volume = do {
-		if( $self->{use_applescript} and eval { require Mac::AppleScript } )
+               if( $self->{use_carbon} and eval { require MacPerl } )
 			{
-	
-			my $script = "return path to startup disk as string";
-	
-			my $volume = Mac::AppleScript::RunAppleScript( $script );
-			$volume =~ s/^"|"$//g;
-			$volume =~ s/:$//g;
+                       (my $volume = scalar MacPerl::Volumes()) =~ s/^.+?:(.+)$/$1/;
 			$volume;
 			}
 		else
@@ -337,8 +333,6 @@ sub _is_startup
 	{
 	my $self = shift;
 	my $name = shift;
-
-	$name =~ s/"/\\"/g;
 
 	$self->_get_startup unless defined $self->startup;
 	
