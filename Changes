@@ -1,5 +1,9 @@
 # $Id$
 
+0.1 - Thu Sep  2 17:26:53 2004
+* distribution clean-up: no need to upgrade if you already have this 
+module
+
 0.09 - Sun May 11 22:00:00 CST 2002
 	+ Now uses Mac::Carbon (MacPerl::Volumes()) to get the
 	  startup volume, which is more efficient and reliable than
