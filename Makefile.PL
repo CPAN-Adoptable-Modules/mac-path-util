@@ -1,6 +1,20 @@
 # $Id$
 use ExtUtils::MakeMaker;
 	
+eval "use Test::Manifest";
+
+unless( $@ )
+	{
+	* ExtUtils::MM_Any::test_via_harness = sub
+		{
+		my($self, $perl, $tests) = @_;
+		
+		return qq|\t$perl "-MTest::Manifest" | .
+			qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
+			qq|'\$(INST_ARCHLIB)')"\n|;
+		}
+	}
+	
 WriteMakefile(
     'NAME'	    => 'Mac::Path::Util',
     'VERSION_FROM'  => 'lib/Util.pm',
@@ -12,9 +26,6 @@ WriteMakefile(
     'PREREQ_PM' => {
 	'Test::Data'        => '0',
 	'Test::More'        => '0',
-	'File::Find'	    => '0',
-	'File::Spec'	    => '0',
-	'base'		    => '0',
     },
 
     'MAN3PODS'		=> {
