@@ -2,22 +2,24 @@
 use ExtUtils::MakeMaker;
 	
 WriteMakefile(
-    'NAME'		    => 'Mac::Path::Util',
+    'NAME'	    => 'Mac::Path::Util',
     'VERSION_FROM'  => 'lib/Util.pm',
 	
-    'PM'            => {
-     	'lib/Util.pm'         => '$(INST_LIBDIR)/Util.pm',
+    'PM' => {
+	    'lib/Util.pm'         => '$(INST_LIBDIR)/Util.pm',
     },
 
-	'PREREQ_PM' => {
-		'File::Find::Rule'  => '0',
-		'Test::Data'        => '0',
-		'Test::More'        => '0',
-		},
+    'PREREQ_PM' => {
+	'Test::Data'        => '0',
+	'Test::More'        => '0',
+	'File::Find'	    => '0',
+	'File::Spec'	    => '0',
+	'base'		    => '0',
+    },
 
-	'MAN3PODS'		=> {
-		'lib/Util.pm'    => '$(INST_MAN3DIR)/Mac::Path::Util.3',
-		},
-		    	
-	clean => { FILES => 'Mac-Path-Util-*' },
-	);
+    'MAN3PODS'		=> {
+	'lib/Util.pm'    => '$(INST_MAN3DIR)/Mac::Path::Util.3',
+    },
+	    	
+    clean => { FILES => 'Mac-Path-Util-*' },
+);
