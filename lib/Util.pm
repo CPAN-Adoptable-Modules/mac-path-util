@@ -314,6 +314,7 @@ sub _get_startup
 		if( $self->{use_carbon} and eval { require MacPerl } )
 			{
 			(my $volume = scalar MacPerl::Volumes()) =~ s/^.+?:(.+)$/$1/;
+			$volume;
 			}
 		else
 			{

@@ -11,7 +11,7 @@ $util->use_carbon(0);
 isa_ok( $util, 'Mac::Path::Util' );
 
 my $startup = $util->_get_startup;
-is( $startup, $Startup, '_get_startup returns right name' );
+is( $startup, $Startup, "_get_startup returns right name [$startup]" );
 
 $util->use_carbon(1);
 $util->clear_startup;
