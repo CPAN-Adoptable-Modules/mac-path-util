@@ -1,5 +1,10 @@
 # $Id$
 
+0.22 - Thu Apr  6 10:59:04 2006
+	* Added the Changes file to MANIFEST so you actaully get to 
+	see this file
+	* No need to upgrade
+
 0.21 - Fri Mar 11 23:16:02 2005
 	* fixed _get_startup to actually work under Mac::Carbon
 	* added POD coverage tests
