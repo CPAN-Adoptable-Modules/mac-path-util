@@ -1,0 +1,11 @@
+.cvsignore
+.releaserc
+.lwpcookies
+Mac-.*
+CVS
+blib
+.*bak
+\.old
+Makefile$
+MANIFEST.SKIP
+\.DS_Store

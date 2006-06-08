@@ -357,7 +357,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2004, brian d foy, All rights reserved
+Copyright 2002-2006, brian d foy, All rights reserved
 
 You may use this package under the same terms as Perl itself
 
