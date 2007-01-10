@@ -6,6 +6,7 @@ eval "use Test::Manifest 1.14";
 WriteMakefile(
     'NAME'	        => 'Mac::Path::Util',
     'VERSION_FROM'  => 'lib/Util.pm',
+	'LICENSE'       => 'perl',
 	
     'PM'        => {
 	    'lib/Util.pm'         => '$(INST_LIBDIR)/Util.pm',
