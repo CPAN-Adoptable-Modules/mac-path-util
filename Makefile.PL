@@ -1,11 +1,15 @@
 # $Id$
 use ExtUtils::MakeMaker;
 	
+require 5.006;
+
 eval "use Test::Manifest 1.14";
 	
 WriteMakefile(
     'NAME'	       => 'Mac::Path::Util',
-    'VERSION_FROM' => 'lib/Util.pm',
+ 	'ABSTRACT'     => 'convert between darwin and Mac paths';
+
+   'VERSION_FROM'  => 'lib/Util.pm',
 	'LICENSE'      => 'perl',
 	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
 	
