@@ -1,5 +1,8 @@
 # $Id$
 
+0.25 - Wed Jan 16 05:44:17 2008
+	* Cleanups for the move from CVS to SVN. No need to upgrade.
+
 0.24 - Tue Jan  9 22:30:57 2007
 	* updated copyright and license info
 	* no code changes, so no need to upgrade
