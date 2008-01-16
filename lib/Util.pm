@@ -2,6 +2,9 @@
 package Mac::Path::Util;
 use strict;
 
+use warnings;
+no warnings;
+
 use base qw(Exporter);
 use vars qw(@EXPORT_OK %EXPORT_TAGS $VERSION);
 

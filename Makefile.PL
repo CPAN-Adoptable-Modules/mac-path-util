@@ -7,8 +7,7 @@ eval "use Test::Manifest 1.14";
 
 WriteMakefile(
     'NAME'	       => 'Mac::Path::Util',
- 	'ABSTRACT'     => 'convert between darwin and Mac paths';
-
+ 	'ABSTRACT'     => 'convert between darwin and Mac paths',
    'VERSION_FROM'  => 'lib/Util.pm',
 	'LICENSE'      => 'perl',
 	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
