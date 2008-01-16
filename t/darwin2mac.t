@@ -13,7 +13,7 @@ BEGIN {
 		[ qw(/Volumes/CPAN/brian/Dev/Mac CPAN:brian:Dev:Mac) ],
 		);
 	}
-	
+
 use Test::More tests => 2 * scalar @pairs;
 use Test::Data qw(Scalar);
 
@@ -27,7 +27,7 @@ foreach my $pair ( @pairs )
 
 	is( $result, $pair->[1],
 		"White box: Mac path is right [$$pair[1]]" );
-	
+
 	# black box test
 	my $path = Mac::Path::Util->new( $pair->[0] );
 	if( $path->type eq Mac::Path::Util::DONT_KNOW )
@@ -35,10 +35,10 @@ foreach my $pair ( @pairs )
 		undef_ok( $path->mac_path );
 		next;
 		}
-	
-	is( $path->mac_path, $pair->[1], 
+
+	is( $path->mac_path, $pair->[1],
 		"Black box: Mac path is right [$$pair[1]]" );
 	}
-	
 
-	
+
+

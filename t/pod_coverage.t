@@ -11,5 +11,5 @@ else
 	{
 	plan tests => 1;
 
-	pod_coverage_ok( "Mac::Path::Util" );      
+	pod_coverage_ok( "Mac::Path::Util" );
 	}
