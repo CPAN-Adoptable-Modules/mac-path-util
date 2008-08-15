@@ -1,5 +1,4 @@
 load.t
-prereq.t
 pod.t
 pod_coverage.t
 get_startup.t
