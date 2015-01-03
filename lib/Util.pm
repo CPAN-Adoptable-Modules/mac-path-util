@@ -1,4 +1,3 @@
-# $Id$
 package Mac::Path::Util;
 use strict;
 

@@ -1,5 +1,3 @@
-# $Id$
-
 use Test::More tests => 8;
 
 use Mac::Path::Util;
