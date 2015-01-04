@@ -1,4 +1,4 @@
-# Changes for Mac-Path-Util
+Revision history for Perl module Mac::Path::Util
 
 0.26 - Fri Aug 15 16:35:38 2008
 	* Distro cleanup - no need to reinstall this if you already
