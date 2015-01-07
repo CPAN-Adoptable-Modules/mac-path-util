@@ -1,29 +1,66 @@
-use ExtUtils::MakeMaker;
-
 require 5.006;
+use strict;
+use warnings;
 
-eval "use Test::Manifest 1.14";
+my $github    = 'https://github.com/briandfoy/';
+my $main_file = 'lib/Mac/Path/Util.pm';
 
-WriteMakefile(
-    'NAME'	       => 'Mac::Path::Util',
- 	'ABSTRACT'     => 'convert between darwin and Mac paths',
-   'VERSION_FROM'  => 'lib/Util.pm',
-	'LICENSE'      => 'perl',
-	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
+my %WriteMakefile = (
+    'NAME'	        => 'Mac::Path::Util',
+ 	'ABSTRACT_FROM' => $main_file,
+	'VERSION_FROM'  => $main_file,
+	'LICENSE'       => 'perl',
+	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
 
-
-    'PM'        => {
-	    'lib/Util.pm'         => '$(INST_LIBDIR)/Util.pm',
+	'CONFIGURE_REQUIRES' => {
+		'ExtUtils::MakeMaker' => '6.64',
 		},
 
-    'PREREQ_PM' => {
-		'Test::Data'        => '0',
-		'Test::More'        => '0',
+	'BUILD_REQUIRES' => {
 		},
 
-    'MAN3PODS'  => {
-		'lib/Util.pm'    => '$(INST_MAN3DIR)/Mac::Path::Util.3',
+	'TEST_REQUIRES' => {
+		'Test::Data' => '0',
+		'Test::More' => '0.94',
+		},
+
+	'PREREQ_PM'     => {
+		},
+
+	'META_MERGE' => {
+		'meta-spec' => { version => 2 },
+		resources => {
+			repository => {
+				type => 'git',
+				url  => "$github.git",
+				web  => $github,
+				},
+			bugtraker => {
+				web    => "$github/issues",
+				},
+			homepage => $github,
+			},
 		},
 
     clean => { FILES => 'Mac-Path-Util-*' },
 );
+
+sub arguments { \%WriteMakefile }
+
+do_it() unless caller;
+sub do_it {
+	require File::Spec;
+	my $MM ='ExtUtils::MakeMaker';
+	my $MM_version =
+		eval{ "$MM " . $WriteMakefile{'CONFIGURE_REQUIRES'}{'ExtUtils::MakeMaker'} }
+			//
+		"$MM 6.64";
+	eval "use $MM_version";
+	eval "use Test::Manifest 1.21" 
+		if -e File::Spec->catfile( qw(t test_manifest) );
+	WriteMakefile( %WriteMakefile );
+	}
+
+
+no warnings;
+__PACKAGE__;
