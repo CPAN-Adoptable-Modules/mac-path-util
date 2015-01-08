@@ -1,12 +1,15 @@
-require 5.006;
+require 5.008;
 use strict;
 use warnings;
 
-my $github    = 'https://github.com/briandfoy/';
-my $main_file = 'lib/Mac/Path/Util.pm';
+use File::Spec::Functions qw(catfile);
+
+my $module    = 'Mac::Path::Util';
+my $github    = 'https://github.com/briandfoy/Mac-Path-Util';
+my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
-    'NAME'	        => 'Mac::Path::Util',
+    'NAME'	        => $module,
  	'ABSTRACT_FROM' => $main_file,
 	'VERSION_FROM'  => $main_file,
 	'LICENSE'       => 'perl',
