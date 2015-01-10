@@ -48,8 +48,8 @@ my %WriteMakefile = (
 			},
 		},
 
-    clean => { FILES => 'Mac-Path-Util-*' },
-);
+	clean => { FILES => "$dist-*" },
+	);
 
 sub arguments { \%WriteMakefile }
 
