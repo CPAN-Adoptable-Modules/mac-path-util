@@ -18,6 +18,8 @@ $VERSION = '0.26';
 
 my $Startup;
 
+=encoding utf8
+
 =head1 NAME
 
 Mac::Path::Util - convert between darwin and Mac paths
@@ -91,7 +93,7 @@ sub new
 	my $args  = shift;
 
 	my $type  = DONT_KNOW
-		unless ( $args->{type} && ( $args->{type} eq DARWIN 
+		unless ( $args->{type} && ( $args->{type} eq DARWIN
 			or $args->{type} eq MACOS ) );
 
 	my $self = {
@@ -100,7 +102,7 @@ sub new
 		path            => $path,
 		use_carbon      => ( $^O eq 'darwin' or $^O =~ /MacOS/ ),
 		};
-	
+
 	bless $self, $class;
 
 	$self->{startup} = $args->{startup} || undef;
@@ -125,7 +127,7 @@ sub new
 		else
 			{
 			$self->{volume}  = $self->_get_startup;
-			$self->{startup} = $self->volume 
+			$self->{startup} = $self->volume
 				if $self->_is_startup( $self->{volume} ) eq TRUE;
 			}
 		}
@@ -141,10 +143,10 @@ sub new
 		unless( defined $self->volume )
 			{
 			$self->{volume}  = $self->_get_startup;
-			$self->{startup} = $self->volume 
+			$self->{startup} = $self->volume
 				if $self->_is_startup( $self->{volume} ) eq TRUE;
 			}
-			
+
 		$self->_darwin2mac;
 		}
 
@@ -195,11 +197,11 @@ startup volume name.
 =cut
 
 sub use_carbon
-	{ 
+	{
 	my $self = shift;
-	
+
 	$self->{use_carbon} = $_[0] ? 1 : 0;
-	
+
 	$self->clear_startup
 	}
 
@@ -308,7 +310,7 @@ sub clear_startup
 sub _get_startup
 	{
 	my $self = shift;
-	
+
 	return $self->startup if defined $self->startup;
 	return $Startup if defined $Startup;
 
@@ -323,7 +325,7 @@ sub _get_startup
 			STARTUP;
 			}
 		};
-		
+
 	#print STDERR "I think the startup volume is [$volume]\n";
 
 	$Startup = $self->{startup} = $volume;
@@ -337,7 +339,7 @@ sub _is_startup
 	my $name = shift;
 
 	$self->_get_startup unless defined $self->startup;
-	
+
 	$name eq $Startup ? TRUE : FALSE;
 	}
 
