@@ -14,7 +14,7 @@ use Exporter;
 %EXPORT_TAGS = (
 	'system' => [ qw(DARWIN MACOS) ],
 	);
-$VERSION = '0.26';
+$VERSION = '1.001';
 
 my $Startup;
 
