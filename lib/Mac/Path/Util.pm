@@ -275,7 +275,7 @@ sub _identify {
 
 =item clear_startup
 
-Clear the cached startup volume name.  The next lookup will
+Clear the cached startup volume name. The next lookup will
 reset the cache.
 
 =cut
