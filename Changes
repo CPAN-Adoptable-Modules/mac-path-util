@@ -1,5 +1,8 @@
 Revision history for Perl module Mac::Path::Util
 
+1.001 2016-02-03T01:48:28Z
+	* Freshen distro and note GitHub address
+
 0.26 - 2008-08-15
 	* Distro cleanup - no need to reinstall this if you already
 	have it
