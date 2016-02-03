@@ -86,8 +86,7 @@ The optional anonymous hash can have these values:
 
 =cut
 
-sub new
-	{
+sub new {
 	my $class = shift;
 	my $path  = shift;
 	my $args  = shift;
@@ -113,35 +112,29 @@ sub new
 
 	# we know that there is at least one colon in the path
 	# if the type is MACOS
-	if( $self->type eq MACOS )
-		{
+	if( $self->type eq MACOS ) {
 		$self->{mac_path} = $self->path;
 
 		# absolute paths do not start with colons
-		if( index( $self->path, 0, 1 ) ne ":" )
-			{
+		if( index( $self->path, 0, 1 ) ne ":" ) {
 			my( $volume )= $self->path =~ m/^(.+?):/g;
 
 			$self->{volume} = $volume;
 			}
-		else
-			{
+		else {
 			$self->{volume}  = $self->_get_startup;
 			$self->{startup} = $self->volume
 				if $self->_is_startup( $self->{volume} ) eq TRUE;
 			}
 		}
-	elsif( $self->type eq DARWIN )
-		{
+	elsif( $self->type eq DARWIN ) {
 		$self->{darwin_path} = $self->path;
 
-		if( index( $self->path, 0, 1 ) eq "/" )
-			{
+		if( index( $self->path, 0, 1 ) eq "/" ) {
 			$self->{volume} = $self->path =~ m|^/Volumes/(.*?)/?|g;
 			}
 
-		unless( defined $self->volume )
-			{
+		unless( defined $self->volume ) {
 			$self->{volume}  = $self->_get_startup;
 			$self->{startup} = $self->volume
 				if $self->_is_startup( $self->{volume} ) eq TRUE;
@@ -196,8 +189,7 @@ startup volume name.
 
 =cut
 
-sub use_carbon
-	{
+sub use_carbon {
 	my $self = shift;
 
 	$self->{use_carbon} = $_[0] ? 1 : 0;
@@ -205,8 +197,7 @@ sub use_carbon
 	$self->clear_startup
 	}
 
-sub _d2m_trans
-	{
+sub _d2m_trans {
 	my $name = shift;
 
 	$name =~ tr|/:|:/|;
@@ -214,22 +205,19 @@ sub _d2m_trans
 	return $name;
 	}
 
-sub _darwin2mac
-	{
+sub _darwin2mac {
 	my $self = shift;
 
 	my $name = $self->{starting_path};
 
 	$self->{mac_path} = do {
 		# is this a relative url?
-		if(    substr( $name, 0, 1 ) ne "/" )
-			{
+		if(    substr( $name, 0, 1 ) ne "/" ) {
 			my $path = ":" . _d2m_trans( $name );
 			$path;
 			}
 		# is this an absolute url with another Volume?
-		elsif( $name =~ m|^/Volumes/([^/]+)(/.*)| )
-			{
+		elsif( $name =~ m|^/Volumes/([^/]+)(/.*)| ) {
 			my $volume = $1;
 			my $path   = $2;
 
@@ -238,8 +226,7 @@ sub _darwin2mac
 			my $abs = $volume .  $path;
 			}
 		# absolute path off of startup volume?
-		elsif( substr( $name, 0, 1 ) eq "/" )
-			{
+		elsif( substr( $name, 0, 1 ) eq "/" ) {
 			my $volume = $self->_get_startup;
 
 			my $path = _d2m_trans( $name );
@@ -251,8 +238,7 @@ sub _darwin2mac
 	return $self->{mac_path};
 	}
 
-sub _mac2darwin
-	{
+sub _mac2darwin {
 	my $self = shift;
 	my $name = shift;
 
@@ -261,8 +247,7 @@ sub _mac2darwin
 	return $name;
 	}
 
-sub _identify
-	{
+sub _identify {
 	my $self = shift;
 
 	my $colons = 0;
@@ -271,22 +256,18 @@ sub _identify
 	if ( defined $self->{starting_path} ) {
 		$colons  = $self->{starting_path} =~ tr/://;
 		$slashes = $self->{starting_path} =~ tr|/||;
-	}
+		}
 
-	if(    $colons == 0 and $slashes == 0 )
-		{
+	if(    $colons == 0 and $slashes == 0 ) {
 		$self->{type} = DONT_KNOW;
 		}
-	elsif( $colons != 0 and $slashes == 0 )
-		{
+	elsif( $colons != 0 and $slashes == 0 ) {
 		$self->{type} = MACOS;
 		}
-	elsif( $colons == 0 and $slashes != 0 )
-		{
+	elsif( $colons == 0 and $slashes != 0 ) {
 		$self->{type} = DARWIN;
 		}
-	elsif( $colons != 0 and $slashes != 0 )
-		{
+	elsif( $colons != 0 and $slashes != 0 ) {
 		$self->{type} = DONT_KNOW;
 		}
 
@@ -299,29 +280,25 @@ reset the cache.
 
 =cut
 
-sub clear_startup
-	{
+sub clear_startup {
 	my $self = shift;
 
 	delete $self->{startup} if ref $self;
 	$Startup = undef;
 	}
 
-sub _get_startup
-	{
+sub _get_startup {
 	my $self = shift;
 
 	return $self->startup if defined $self->startup;
 	return $Startup if defined $Startup;
 
 	my $volume = do {
-		if( $self->{use_carbon} and eval { require MacPerl } )
-			{
+		if( $self->{use_carbon} and eval { require MacPerl } ) {
 			(my $volume = scalar MacPerl::Volumes()) =~ s/^.+?:(.+)$/$1/;
 			$volume;
 			}
-		else
-			{
+		else {
 			STARTUP;
 			}
 		};
@@ -333,8 +310,7 @@ sub _get_startup
 	return $volume;
 	}
 
-sub _is_startup
-	{
+sub _is_startup {
 	my $self = shift;
 	my $name = shift;
 
