@@ -33,6 +33,8 @@ Mac::Path::Util - convert between darwin and Mac paths
 
 =head1 DESCRIPTION
 
+I'VE ABANDONED THIS MODULE. YOU ARE ON YOUR OWN.
+
 THIS IS ALPHA SOFTWARE.  SOME THINGS ARE NOT FINISHED.
 
 Convert between darwin (unix) and Mac file paths.
@@ -325,7 +327,7 @@ sub _is_startup {
 
 This source is on GitHub:
 
-	https://github.com/briandfoy/mac-path-util
+	https://github.com/CPAN-Adoptable-Modules/mac-path-util
 
 =head1 AUTHOR
 
