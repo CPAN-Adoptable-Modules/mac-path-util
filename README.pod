@@ -4,8 +4,8 @@
 
 =head1 The Mac::Path::Util module
 
-**This is an abandoned module. There is no support. Adopt it on CPAN if you
-want to fix it.**
+B<This is an abandoned module. There is no support. Adopt it on CPAN if you
+want to fix it.>
 
 This is the I<README> for the L<Mac::Path::Util> Perl module. You're probably
 looking at this because you don't know where else to find what you're
